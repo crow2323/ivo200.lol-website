@@ -1,4 +1,141 @@
-<h1>in development</h1> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ivo200.lol</title>
 
-<p>this website is in devolpment 
-   demo 1.0</p> 
+<style>
+
+/* ===== BASE PAGE ===== */
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: #1a1a1a;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  color: white;
+}
+
+/* ===== DVD BACKGROUND ===== */
+#dvd {
+  position: fixed;
+  z-index: -2; /* Behind everything */
+  font-size: 28px;
+  font-weight: bold;
+  padding: 20px 30px;
+  border-radius: 2%;
+  color: white;
+  background: linear-gradient(45deg, #000000, #8d1296, #eb00f8);
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite;
+  user-select: none;
+}
+
+/* Gradient animation */
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ===== RAIN LAYER ===== */
+.raindrop {
+  position: fixed;
+  top: -10px;
+  width: 2px;
+  height: 15px;
+  background: rgba(255,255,255,0.5);
+  animation: fall linear infinite;
+  z-index: -1; /* Above DVD, below content */
+}
+
+@keyframes fall {
+  to { transform: translateY(100vh); }
+}
+
+/* ===== CONTENT (ON TOP) ===== */
+h1 {
+  margin-bottom: 40px;
+  z-index: 1;
+}
+
+#wikiBtn {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: none;
+  background: #a703c0;
+  color: rgb(0, 0, 0);
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 0 19px rgb(234, 0, 255);
+  z-index: 1;
+  transition: 0.3s;
+}
+
+#wikiBtn:hover {
+  background: #000000;
+  color: rgb(212, 0, 255);
+  box-shadow: 0 0 30px rgb(0, 0, 0);
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- DVD BACKGROUND -->
+<div id="dvd">ivo200.lol</div>
+
+<!-- FOREGROUND CONTENT -->
+<h1>In development</h1>
+<button id="wikiBtn">Wiki</button>
+
+<script>
+
+/* ===== DVD MOVEMENT ===== */
+const dvd = document.getElementById("dvd");
+let x = Math.random() * (window.innerWidth - 200);
+let y = Math.random() * (window.innerHeight - 100);
+let dx = 3;
+let dy = 3;
+
+function moveDVD() {
+  x += dx;
+  y += dy;
+
+  if (x + dvd.offsetWidth >= window.innerWidth || x <= 0) dx *= -1;
+  if (y + dvd.offsetHeight >= window.innerHeight || y <= 0) dy *= -1;
+
+  dvd.style.left = x + "px";
+  dvd.style.top = y + "px";
+
+  requestAnimationFrame(moveDVD);
+}
+moveDVD();
+
+/* ===== RAIN ===== */
+for (let i = 0; i < 100; i++) {
+  const drop = document.createElement('div');
+  drop.className = 'raindrop';
+  drop.style.left = Math.random() * window.innerWidth + 'px';
+  drop.style.animationDuration = 0.5 + Math.random() * 1.5 + 's';
+  drop.style.opacity = 0.2 + Math.random() * 0.5;
+  document.body.appendChild(drop);
+}
+
+/* ===== BUTTON CLICK ===== */
+document.getElementById("wikiBtn")
+  .addEventListener("click", () => {
+    window.open("https://www.wikipedia.org", "_blank");
+  });
+
+</script>
+
+</body>
+</html>
