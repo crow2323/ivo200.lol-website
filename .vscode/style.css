@@ -14,8 +14,8 @@ body {
 /* Button styling */
 #wikiBtn {
   width: 120px;
-  height: 120px;
-  border-radius: 50%;
+  height: 60px;
+  border-radius: 8%;
   border: none;
   background: #080808;
   color: rgb(0, 0, 0);
@@ -30,22 +30,23 @@ body {
 }
 
 /* Water-like wobble animation keyframes */
-@keyframes wobble {
-  0%   { transform: scale(1) rotate(0deg); border-radius: 50%; }
-  15%  { transform: scale(1.1,0.9) rotate(-5deg); border-radius: 45% 55%; }
-  30%  { transform: scale(0.9,1.1) rotate(5deg); border-radius: 55% 45%; }
-  45%  { transform: scale(1.05,0.95) rotate(-3deg); border-radius: 48% 52%; }
-  60%  { transform: scale(0.95,1.05) rotate(3deg); border-radius: 52% 48%; }
-  75%  { transform: scale(1.02,0.98) rotate(-1deg); border-radius: 49% 51%; }
-  100% { transform: scale(1) rotate(0deg); border-radius: 50%; }
+@keyframes wobbleBox {
+  0%   { transform: scale(1) rotate(0deg); }
+  15%  { transform: scale(1.05,0.95) rotate(-2deg); }
+  30%  { transform: scale(0.95,1.05) rotate(2deg); }
+  45%  { transform: scale(1.02,0.98) rotate(-1deg); }
+  60%  { transform: scale(0.98,1.02) rotate(1deg); }
+  75%  { transform: scale(1.01,0.99) rotate(-0.5deg); }
+  100% { transform: scale(1) rotate(0deg); }
 }
 
-/* Hover triggers wobble */
+/* Hover triggers the animation */
 #wikiBtn:hover {
-  animation: wobble 0.6s ease;
-  background: #e90303; /* slightly brighter on hover */
-  box-shadow: 0 0 30px #000000;
+  animation: wobbleBox 0.6s ease;
+  background: #f41dfd; /* slightly brighter on hover */
+  box-shadow: 0 0 30px #ea00ff;
 }
+
 
 /* Click effect for extra water-like squish */
 #wikiBtn:active {
