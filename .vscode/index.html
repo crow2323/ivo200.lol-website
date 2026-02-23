@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"> 
 <head>
 <meta charset="UTF-8">
-<title>ivo200.lol</title>
+<title>website</title>
 
 <style>
 
-/* ===== BASE PAGE ===== */
+/* base page */
 body {
   margin: 0;
   height: 100vh;
@@ -18,124 +18,128 @@ body {
   justify-content: center;
   align-items: center;
   position: relative;
-  color: white;
+  color: rgb(247, 247, 247);
 }
 
-/* ===== DVD BACKGROUND ===== */
-#dvd {
-  position: fixed;
-  z-index: -2; /* Behind everything */
-  font-size: 23px;
-  font-weight: bold;
-  padding: 20px 30px;
-  border-radius: 10%;
-  color: white;
-  background: linear-gradient(45deg, #000000, #8d1296, #eb00f8);
-  background-size: 400% 400%;
-  animation: gradient 5s ease infinite;
-  user-select: none;
-}
+    body {
+      margin: 0;
+      background: #111;
+      overflow: hidden;
+    }
 
-/* Gradient animation */
-@keyframes gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* ===== RAIN LAYER ===== */
-.raindrop {
-  position: fixed;
-  top: -10px;
-  width: 2px;
-  height: 15px;
-  background: rgba(255,255,255,0.5);
-  animation: fall linear infinite;
-  z-index: -1; /* Above DVD, below content */
-}
-
-@keyframes fall {
-  to { transform: translateY(100vh); }
-}
-
-/* ===== CONTENT (ON TOP) ===== */
-h1 {
-  margin-bottom: 40px;
-  z-index: 1;
-}
-
-#wikiBtn {
-  width: 120px;
-  height: 50px;
-  border-radius: 8%;
-  border: none;
-  background: #a703c0;
-  color: rgb(0, 0, 0);
-  font-size: 18px;
-  cursor: pointer;
-  box-shadow: 0 0 19px rgb(234, 0, 255);
-  z-index: 1;
-  transition: 0.3s;
-}
-
-#wikiBtn:hover {
-  background: #000000;
-  color: rgb(212, 0, 255);
-  box-shadow: 0 0 30px rgb(0, 0, 0);
-}
-
-</style>
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      filter: blur(10px) contrast(30);
+    }
+  </style>
 </head>
-
 <body>
 
-<!-- DVD BACKGROUND -->
-<div id="dvd">ivo200.lol</div>
-
-<!-- FOREGROUND CONTENT -->
-<h1>In development</h1>
-<button id="wikiBtn">discord</button>
+<canvas id="slime"></canvas>
 
 <script>
+const canvas = document.getElementById("slime");
+const ctx = canvas.getContext("2d");
 
-/* ===== DVD MOVEMENT ===== */
-const dvd = document.getElementById("dvd");
-let x = Math.random() * (window.innerWidth - 200);
-let y = Math.random() * (window.innerHeight - 100);
-let dx = 3;
-let dy = 3;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-function moveDVD() {
-  x += dx;
-  y += dy;
+const dripCount = 25;
+let drips = [];
 
-  if (x + dvd.offsetWidth >= window.innerWidth || x <= 0) dx *= -1;
-  if (y + dvd.offsetHeight >= window.innerHeight || y <= 0) dy *= -1;
-
-  dvd.style.left = x + "px";
-  dvd.style.top = y + "px";
-
-  requestAnimationFrame(moveDVD);
-}
-moveDVD();
-
-/* ===== RAIN ===== */
-for (let i = 0; i < 100; i++) {
-  const drop = document.createElement('div');
-  drop.className = 'raindrop';
-  drop.style.left = Math.random() * window.innerWidth + 'px';
-  drop.style.animationDuration = 0.5 + Math.random() * 1.5 + 's';
-  drop.style.opacity = 0.2 + Math.random() * 0.5;
-  document.body.appendChild(drop);
-}
-
-/* ===== BUTTON CLICK ===== */
-document.getElementById("wikiBtn")
-  .addEventListener("click", () => {
-    window.open("https://www.wikipedia.org", "_blank");
+for (let i = 0; i < dripCount; i++) {
+  drips.push({
+    x: (canvas.width / dripCount) * i,
+    baseHeight: 60 + Math.random() * 40,
+    amplitude: 40 + Math.random() * 60,
+    speed: 0.002 + Math.random() * 0.003,
+    offset: Math.random() * 1000
   });
+}
 
+function drawSlime(time) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "#a703c0";
+
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(canvas.width, 0);
+
+  for (let i = drips.length - 1; i >= 0; i--) {
+    let drip = drips[i];
+    let wave = Math.sin(time * drip.speed + drip.offset);
+    let height = drip.baseHeight + wave * drip.amplitude;
+
+    ctx.lineTo(drip.x, height);
+  }
+
+  ctx.lineTo(0, drips[0].baseHeight);
+  ctx.closePath();
+  ctx.fill();
+}
+
+function animate(time) {
+  drawSlime(time);
+  requestAnimationFrame(animate);
+}
+
+animate(0);
+
+// Resize fix
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
 </script>
 
 </body>
 </html>
+
+<h1>Ivo 200</h1>
+
+
+
+<div class="search-box">
+  <input type="text" id="search" placeholder="Explore 200" onkeyup="showResults()">
+  <div id="results" class="results"></div>
+</div>
+
+
+<script>
+const pages = [
+  { name: "About Us", url: "about.html" },
+  { name: "Services", url: "services.html" },
+  { name: "Contact", url: "contact.html" },
+  { name: "Blog", url: "blog.html" }
+];
+
+function showResults() {
+  const input = document.getElementById("search").value.toLowerCase();
+  const resultsDiv = document.getElementById("results");
+  resultsDiv.innerHTML = "";
+
+  if (!input) {
+    resultsDiv.style.display = "none";
+    return;
+  }
+
+  const filtered = pages.filter(page =>
+    page.name.toLowerCase().includes(input)
+  );
+
+  filtered.forEach(page => {
+    const div = document.createElement("div");
+    div.textContent = page.name;
+    div.onclick = () => window.location.href = page.url;
+    resultsDiv.appendChild(div);
+  });
+
+  resultsDiv.style.display = filtered.length ? "block" : "none";
+}
+</script>
+
