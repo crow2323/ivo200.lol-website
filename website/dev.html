@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ivo200.lol</title>
 
 <style>
@@ -9,8 +10,7 @@
 /* ===== BASE PAGE ===== */
 body {
   margin: 0;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
   background: #1a1a1a;
   font-family: sans-serif;
   display: flex;
@@ -18,22 +18,26 @@ body {
   justify-content: center;
   align-items: center;
   position: relative;
-  color: white
+  color: white;
+  overflow: hidden;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 /* ===== DVD BACKGROUND ===== */
 #dvd {
   position: fixed;
-  z-index: -2; /* Behind everything */
-  font-size: 23px;
+  z-index: -2;
+  font-size: clamp(16px, 3vw, 23px);
   font-weight: bold;
-  padding: 20px 30px;
-  border-radius: 10%;
+  padding: clamp(12px, 2vw, 20px) clamp(18px, 3vw, 30px);
+  border-radius: 12px;
   color: white;
   background: linear-gradient(45deg, #000000, #8d1296, #eb00f8);
   background-size: 400% 400%;
   animation: gradient 5s ease infinite;
   user-select: none;
+  white-space: nowrap;
 }
 
 /* Gradient animation */
@@ -51,23 +55,25 @@ body {
   height: 15px;
   background: rgba(255,255,255,0.5);
   animation: fall linear infinite;
-  z-index: -1; /* Above DVD, below content */
+  z-index: -1;
 }
 
 @keyframes fall {
-  to { transform: translateY(100vh); }
+  to { transform: translateY(110vh); }
 }
 
-/* ===== CONTENT (ON TOP) ===== */
+/* ===== CONTENT ===== */
 h1 {
   margin-bottom: 40px;
   z-index: 1;
+  text-align: center;
+  font-size: clamp(24px, 5vw, 36px);
 }
 
 #wikiBtn {
-  width: 120px;
+  width: 140px;
   height: 50px;
-  border-radius: 8%;
+  border-radius: 10px;
   border: none;
   background: #a703c0;
   color: rgb(0, 0, 0);
@@ -75,13 +81,26 @@ h1 {
   cursor: pointer;
   box-shadow: 0 0 19px rgb(234, 0, 255);
   z-index: 1;
-  transition: 0.3s;
+  transition: all 0.3s ease;
 }
 
 #wikiBtn:hover {
   background: #000000;
   color: rgb(212, 0, 255);
   box-shadow: 0 0 30px rgb(0, 0, 0);
+}
+
+/* ===== Small Mobile Tweaks ===== */
+@media (max-width: 480px) {
+  h1 {
+    margin-bottom: 30px;
+  }
+
+  #wikiBtn {
+    width: 160px;
+    height: 48px;
+    font-size: 16px;
+  }
 }
 
 </style>
@@ -94,17 +113,21 @@ h1 {
 
 <!-- FOREGROUND CONTENT -->
 <h1>In development</h1>
-
 <button id="wikiBtn">testbutton</button>
 
 <script>
 
 /* ===== DVD MOVEMENT ===== */
 const dvd = document.getElementById("dvd");
-let x = Math.random() * (window.innerWidth - 200);
-let y = Math.random() * (window.innerHeight - 100);
-let dx = 3;
-let dy = 3;
+
+let x, y, dx = 3, dy = 3;
+
+function resetPosition() {
+  x = Math.random() * (window.innerWidth - dvd.offsetWidth);
+  y = Math.random() * (window.innerHeight - dvd.offsetHeight);
+}
+
+resetPosition();
 
 function moveDVD() {
   x += dx;
@@ -120,15 +143,21 @@ function moveDVD() {
 }
 moveDVD();
 
+window.addEventListener("resize", resetPosition);
+
 /* ===== RAIN ===== */
-for (let i = 0; i < 100; i++) {
-  const drop = document.createElement('div');
-  drop.className = 'raindrop';
-  drop.style.left = Math.random() * window.innerWidth + 'px';
-  drop.style.animationDuration = 0.5 + Math.random() * 1.5 + 's';
-  drop.style.opacity = 0.2 + Math.random() * 0.5;
-  document.body.appendChild(drop);
+function createRain() {
+  const dropCount = 100;
+  for (let i = 0; i < dropCount; i++) {
+    const drop = document.createElement('div');
+    drop.className = 'raindrop';
+    drop.style.left = Math.random() * window.innerWidth + 'px';
+    drop.style.animationDuration = 0.5 + Math.random() * 1.5 + 's';
+    drop.style.opacity = 0.2 + Math.random() * 0.5;
+    document.body.appendChild(drop);
+  }
 }
+createRain();
 
 /* ===== BUTTON CLICK ===== */
 document.getElementById("wikiBtn")
