@@ -5,7 +5,6 @@
 <title>website</title>
 
 <style>
-
 /* base page */
 body {
   margin: 0;
@@ -15,33 +14,104 @@ body {
   font-family: sans-serif;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   position: relative;
   color: rgb(247, 247, 247);
+  padding-top: 150px;
 }
 
-    body {
-      margin: 0;
-      background: #111;
-      overflow: hidden;
-    }
+/* canvas slime effect */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  filter: blur(10px) contrast(30);
+  z-index: -1;
+}
 
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      filter: blur(10px) contrast(30);
-    }
-  </style>
+/* heading */
+h1 {
+  font-size: 48px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* search box */
+.search-box {
+  position: relative;
+  width: 300px;
+  perspective: 1000px;
+  margin-bottom: 50px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 12px 15px;
+  border: none;
+  border-radius: 12px;
+  outline: none;
+  font-size: 16px;
+  background: #1a1a1a;
+  color: white;
+  box-shadow: 
+    0 8px 15px rgba(0,0,0,0.4),
+    inset 0 2px 4px rgba(255,255,255,0.1);
+  transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+  transform: translateY(-3px);
+  box-shadow: 
+    0 12px 20px rgba(0,0,0,0.5),
+    inset 0 2px 4px rgba(255,255,255,0.15),
+    0 0 10px #a703c0;
+}
+
+/* dropdown results */
+.results {
+  position: absolute;
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #ff4dff, #c000c0 40%, #8f00ff);
+  box-shadow: 
+    0 15px 25px rgba(0,0,0,0.5),
+    inset 0 1px 2px rgba(255,255,255,0.2);
+  display: none;
+  overflow: hidden;
+}
+
+.results div {
+  padding: 12px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.results div:hover {
+  transform: translateX(5px);
+  box-shadow: inset 3px 0 5px rgba(0,0,0,0.3);
+  background: linear-gradient(145deg, #ff7fff, #d000d0 40%, #a600ff);
+}
+</style>
 </head>
+
 <body>
 
 <canvas id="slime"></canvas>
 
+<h1>Ivo 200</h1>
+
+<div class="search-box">
+  <input type="text" id="search" placeholder="Explore 200" onkeyup="showResults()">
+  <div id="results" class="results"></div>
+</div>
+
 <script>
+// slime canvas animation
 const canvas = document.getElementById("slime");
 const ctx = canvas.getContext("2d");
 
@@ -63,9 +133,7 @@ for (let i = 0; i < dripCount; i++) {
 
 function drawSlime(time) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
   ctx.fillStyle = "#a703c0";
-
   ctx.beginPath();
   ctx.moveTo(0, 0);
   ctx.lineTo(canvas.width, 0);
@@ -74,7 +142,6 @@ function drawSlime(time) {
     let drip = drips[i];
     let wave = Math.sin(time * drip.speed + drip.offset);
     let height = drip.baseHeight + wave * drip.amplitude;
-
     ctx.lineTo(drip.x, height);
   }
 
@@ -90,35 +157,20 @@ function animate(time) {
 
 animate(0);
 
-// Resize fix
 window.addEventListener("resize", () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 });
-</script>
 
-</body>
-</html>
-
-<h1>Ivo 200</h1>
-
-
-
-<div class="search-box">
-  <input type="text" id="search" placeholder="Explore 200" onkeyup="showResults()">
-  <div id="results" class="results"></div>
-</div>
-
-
-<script>
+// REAL page navigation
 const pages = [
   { name: "In Development", url: "dev.html" },
   { name: "Services", url: "services.html" },
   { name: "Contact", url: "contact.html" },
-  { name: "Blog", url: "blog.html" }
+  { name: "Blog", url: "blog.html" },
+  { name: "Shoutout Wall", url: "shoutout.html" }
+
 ];
-
-
 
 function showResults() {
   const input = document.getElementById("search").value.toLowerCase();
@@ -137,7 +189,11 @@ function showResults() {
   filtered.forEach(page => {
     const div = document.createElement("div");
     div.textContent = page.name;
-    div.onclick = () => window.location.href = page.url;
+
+    div.onclick = () => {
+      window.location.href = page.url; // REAL navigation
+    };
+
     resultsDiv.appendChild(div);
   });
 
@@ -145,3 +201,5 @@ function showResults() {
 }
 </script>
 
+</body>
+</html>
