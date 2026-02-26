@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ivo<3333</title>
+<style>
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Comic Sans MS', sans-serif;
+  background: url('images/background.gif') center center / cover no-repeat fixed;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Container */
+.container-wrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 15px;
+  width: 850px;
+}
+
+/* Left column */
+.left-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
+}
+
+/* Profile pic */
+.profile-pic {
+  width: 180px;
+  height: 180px;
+  background: #fff url('images/pfp.jpeg') center/cover no-repeat;
+  border-radius: 0;
+  border: 4px solid #00a2ff;
+  cursor: pointer;
+  box-shadow:
+    0 0 15px #00a2ff,
+    0 0 30px #00a2ff,
+    0 0 45px #00a2ff,
+    0 0 60px #00a2ff,
+    0 0 75px #00a2ff;
+  animation: burnerGlow 1.5s infinite alternate;
+}
+@keyframes burnerGlow {
+  0% { box-shadow: 0 0 15px #00a2ff,0 0 30px #00a2ff,0 0 45px #00a2ff,0 0 60px #00a2ff,0 0 75px #00a2ff; }
+  50% { box-shadow: 0 0 20px #00a2ff,0 0 35px #00a2ff,0 0 50px #00a2ff,0 0 65px #00a2ff,0 0 80px #ffffff; }
+  100% { box-shadow: 15px #ffffff,15px #ffffff,15px #ffffff,15px #ffffff,15px #ffffff; }
+}
+
+/* Sidebar */
+.sidebar {
+  flex: 0 0 120px;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  color: white;
+  padding: 8px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 12px rgba(0,0,0,0.4);
+  width: 120px;
+  text-align: center;
+}
+.sidebar ul { list-style: none; padding: 0; margin: 0; }
+.sidebar ul li { margin: 6px 0; }
+.sidebar ul li a { color: white; text-decoration: none; transition: 0.2s; font-size: 0.9em; }
+.sidebar ul li a:hover { color: #00a2ff; }
+
+/* Main container */
+.main-container { display: flex; gap: 10px; flex: 1; }
+
+/* Left panel */
+.main-left {
+  flex: 0 0 200px;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  color: white;
+  padding: 8px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 12px rgba(0,0,0,0.4);
+  height: 400px;
+  overflow-y: auto;
+}
+
+/* Right panel */
+.main-right {
+  flex: 1 1 auto;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  color: white;
+  padding: 8px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 12px rgba(0,0,0,0.4);
+  height: 400px;
+  overflow-y: auto;
+}
+
+/* Tabs */
+.tabs { display: flex; gap: 6px; margin-bottom: 8px; cursor: pointer; flex-wrap: wrap; }
+.tab { padding: 3px 6px; background: rgba(10, 10, 10); border-radius: 5px; transition: 0.2s; font-size: 0.85em; }
+.tab.active { background: #00a2ff; color: rgb(10, 10, 10); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Posts & blog */
+.post, .blog-post {
+  background: rgba(0,0,0,0.55);
+  color: white;
+  padding: 8px;
+  border-radius: 5px;
+  margin-bottom: 8px;
+  transition: 0.2s;
+}
+.post:hover, .blog-post:hover { background: rgba(0,0,0,0.65); }
+
+.blog-date { font-size: 0.75em; color: #ccc; margin-bottom: 5px; }
+.blog-post img { max-width: 100%; margin-top: 6px; border-radius: 5px; }
+
+.blog-post.template { display: none; }
+
+/* ===== YOUTUBE PLAYER STYLES ===== */
+.play-button {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  padding: 4px 10px;
+  font-size: 0.8em;
+  background: rgba(0,0,0,0.7);
+  color: #00a2ff;
+  border: 1px solid #00a2ff;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.player-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.player-box {
+  width: 80%;
+  max-width: 1000px;
+  aspect-ratio: 16/9;
+  background: black;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow:
+    0 0 15px #00a2ff,
+    0 0 30px #00a2ff,
+    0 0 45px #00a2ff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.player-controls {
+  display: flex;
+  padding: 6px;
+  background: rgba(0,0,0,0.8);
+  gap: 6px;
+}
+
+.player-controls input {
+  flex: 1;
+  padding: 6px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+}
+
+.player-controls button {
+  padding: 6px 10px;
+  background: #00a2ff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.player-box iframe {
+  flex: 1;
+  width: 100%;
+  border: none;
+}
+</style>
+</head>
+<body>
+
+<!-- TOGGLE PLAY/CLOSE BUTTON -->
+<button class="play-button" id="togglePlayerButton" onclick="togglePlayer()">Play</button>
+
+<!-- PLAYER OVERLAY -->
+<div class="player-overlay" id="playerOverlay">
+  <div class="player-box">
+    <div class="player-controls" id="playerControls">
+      <input type="text" id="youtubeLink" placeholder="Paste YouTube link here">
+      <button onclick="loadVideo()">Load</button>
+    </div>
+    <iframe id="ytPlayer"></iframe>
+  </div>
+</div>
+
+<div class="container-wrapper">
+  <div class="left-column">
+    <div class="profile-pic" onclick="alert('Change profile pic!')"></div>
+    <div class="sidebar">
+      <h3>Links</h3>
+      <ul>
+        <li><a href="https://example.com/friends" target="_blank">Friends</a></li>
+        <li><a href="https://example.com/music" target="_blank">Music</a></li>
+        <li><a href="https://example.com/comments" target="_blank">Comments</a></li>
+        <li><a href="https://example.com/interests" target="_blank">Interests</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div class="main-left">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('about')">About Me</div>
+        <div class="tab" onclick="switchTab('interests')">Interests</div>
+      </div>
+      <div id="about" class="tab-content active">
+        <h2>About Me</h2>
+        <p>IN DEVELOPMENT</p>
+      </div>
+      <div id="interests" class="tab-content">
+        <ul>
+          <li>Retro web design</li>
+          <li>Gaming & modding</li>
+          <li>Music & audio visuals</li>
+          <li>Creative coding</li>
+          <li>Memes & nostalgia</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="main-right">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTabRight('posts')">Posts</div>
+        <div class="tab" onclick="switchTabRight('blog')">Blog</div>
+      </div>
+      <div id="posts" class="tab-content active">
+        <div class="post">IN DEVELOPMENT</div>
+        <div class="post">IN DEVELOPMENT</div>
+        <div class="post">IN DEVELOPMENT</div>
+      </div>
+
+      <div id="blog" class="tab-content">
+        <h2>Blog</h2>
+
+        <div class="blog-post template">
+          <div class="blog-date">YYYY-MM-DD</div>
+          <p>This is a hidden template post.<br>Copy this block to create a new blog post above older posts.</p>
+        </div>
+
+<div class="blog-post">
+          <div class="blog-date">February-26-2026</div>
+          <p>Mabye i just think too negatively about things genuinely there isnt a reason for me to cmplain sometimes im just the asshole
+          <br>#mabye i am js the problem interesting !</p>
+        </div>
+
+        <div class="blog-post">
+          <div class="blog-date">February-25-2026</div>
+          <p>School is genuinely devastatingly exhuasting to everything i go 5 days a week to a place in which i am supposed to be relaxed
+          and safe at even tho there are constant threats of violence to the populace here. We had a school shooting threat where i was a genuine
+          purposeful threat even tho i knew and respected the dude (i no longer respect him completely but he holds a regard of i now know his circumstances) 
+          <br>This is genuinely disgusting that we are lived like sheep to a violent and unsafe environment that teaches us to do nothing but be beneficial machines.</p>
+        </div>
+
+        <div class="blog-post"> 
+          <div class="blog-date">February 24, 2026</div>
+          <p>I'm so tired of pretending I'm okay. All I want to do is finally just do it.<br>
+          Everybody acts like they like me, but all I am is an anxious mess. Please just give me a reason to continue.</p>
+        </div>
+
+        <div class="blog-post"> 
+          <div class="blog-date">February 24, 2026</div>
+          <p>This is the first blog post of my website page.<br>Welcome to 200 projects.</p>
+        </div>
+
+        <button onclick="addNewPost()">Add New Post</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Left panel tabs
+function switchTab(tabId){
+  document.querySelectorAll('.main-left .tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.main-left .tab-content').forEach(c=>c.classList.remove('active'));
+  document.querySelector(`.main-left .tab[onclick="switchTab('${tabId}')"]`).classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+// Right panel tabs
+function switchTabRight(tabId){
+  document.querySelectorAll('.main-right .tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.main-right .tab-content').forEach(c=>c.classList.remove('active'));
+  document.querySelector(`.main-right .tab[onclick="switchTabRight('${tabId}')"]`).classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+// Add new post dynamically (prepends at top)
+function addNewPost(){
+  const blogContainer = document.getElementById('blog');
+  const template = blogContainer.querySelector('.blog-post.template');
+  const newPost = template.cloneNode(true);
+  newPost.classList.remove('template');
+  const now = new Date();
+  newPost.querySelector('.blog-date').textContent = now.toLocaleDateString();
+  newPost.querySelector('p').textContent = "This is a dynamically added post!";
+  blogContainer.insertBefore(newPost, blogContainer.children[1]); // insert after <h2>Blog</h2>
+}
+
+// ===== YOUTUBE PLAYER =====
+function togglePlayer() {
+  const overlay = document.getElementById('playerOverlay');
+  const button = document.getElementById('togglePlayerButton');
+  
+  if (overlay.style.display === 'flex') {
+    overlay.style.display = 'none';
+    document.getElementById('ytPlayer').src = '';
+    document.getElementById('playerControls').style.display = 'flex';
+    button.textContent = 'Play';
+  } else {
+    overlay.style.display = 'flex';
+    document.getElementById('playerControls').style.display = 'flex';
+    document.getElementById('youtubeLink').value = '';
+    button.textContent = 'Close';
+  }
+}
+
+function loadVideo() {
+  const link = document.getElementById('youtubeLink').value.trim();
+  if (!link) return alert('Please enter a YouTube link!');
+  
+  let videoId = '';
+  if (link.includes('youtube.com/watch?v=')) {
+    videoId = link.split('v=')[1].split('&')[0];
+  } else if (link.includes('youtu.be/')) {
+    videoId = link.split('youtu.be/')[1].split('?')[0];
+  } else {
+    return alert('Invalid YouTube link!');
+  }
+
+  document.getElementById('playerControls').style.display = 'none';
+  document.getElementById('ytPlayer').src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+}
+</script>
+
+</body>
+</html>

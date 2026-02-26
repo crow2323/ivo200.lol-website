@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+<meta charset="UTF-8">
+<title>Tool wall</title>
+
+<style>
+
+/* ===== BASE PAGE ===== */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #1a1a1a;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: rgb(247, 247, 247);
+  padding-top: 150px;
+  overflow-x: hidden;
+}
+
+/* ===== SLIME CANVAS ===== */
+canvas { 
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  filter: blur(10px) contrast(30);
+  z-index: -1;
+}
+
+/* ===== HEADING ===== */
+h1 {
+  font-size: 48px;
+  margin-bottom: 50px;
+  text-align: center;
+  text-shadow: 0 5px 20px rgba(0,0,0,0.8);
+}
+
+/* ===== SHOUT WALL CONTAINER ===== */
+.shout-wall {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-bottom: 100px;
+}
+
+/* ===== 3D EMBEDDED CARD ===== */
+.shout-card {
+  width: 260px;
+  padding: 30px 20px;
+  border-radius: 20px;
+  text-align: center;
+  background: linear-gradient(145deg, #1f1f1f, #2c2c2c);
+
+  box-shadow:
+    15px 15px 35px rgba(0,0,0,0.7),
+    -5px -5px 15px rgba(255,255,255,0.05),
+    inset 0 2px 4px rgba(255,255,255,0.05);
+
+  transition: all 0.4s ease;
+}
+
+/* Hover lift */
+.shout-card:hover {
+  transform: translateY(-12px) scale(1.05);
+  box-shadow:
+    25px 25px 45px rgba(0,0,0,0.8),
+    inset 0 2px 4px rgba(255,255,255,0.1);
+}
+
+/* 3D Name Text */
+.shout-card h2 {
+  font-size: 20px;
+  margin: 10px 0 20px;
+  color: white;
+  text-shadow:
+    0 1px 0 #ccc,
+    0 2px 0 #bbb,
+    0 3px 0 #aaa,
+    0 4px 8px rgba(0,0,0,0.8);
+}
+
+/* ===== TOOL BUTTON ===== */
+.tool-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #ff4dff, #8f00ff);
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+.tool-btn:hover {
+  transform: scale(1.1);
+  background: linear-gradient(145deg, #ff7fff, #a600ff);
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="slime"></canvas>
+
+<h1>Tool Links</h1>
+
+<div class="shout-wall">
+
+  <div class="shout-card">
+    <h2>Coming soon</h2>
+    <a href="https://wikipedia.org" class="tool-btn" target="_blank">Link</a>
+  </div>
+
+  <div class="shout-card">
+    <h2>IN DEV</h2>
+    <a href="https://wikipedia.org" class="tool-btn" target="_blank">Link</a>
+  </div>
+
+  <div class="shout-card">
+    <h2>IN DEV</h2>
+    <a href="https://wikipedia.org" class="tool-btn" target="_blank">Link</a>
+  </div>
+
+  <div class="shout-card">
+    <h2>IN DEV</h2>
+    <a href="https://wikipedia.org" class="tool-btn" target="_blank">Link</a>
+  </div>
+
+  <div class="shout-card">
+    <h2>IN DEV</h2>
+    <a href="https://wikipedia.org" class="tool-btn" target="_blank">Link</a>
+  </div>
+
+  <div class="shout-card">
+    <h2>IN DEV</h2>
+    <a href="https://wikipedia.org" class="tool-btn" target="_blank">Link</a>
+  </div>
+
+  <div class="shout-card">
+    <h2>IN DEV</h2>
+    <a href="https://wikipedia.org" class="tool-btn" target="_blank">Link</a>
+  </div>
+    
+  <div class="shout-card">
+    <h2>IN DEV</h2>
+    <a href="https://wikipedia.org" class="tool-btn" target="_blank">Link</a>
+  </div>
+
+</div>
+
+<script>
+// ===== SLIME ANIMATION =====
+const canvas = document.getElementById("slime");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const dripCount = 25;
+let drips = [];
+
+for (let i = 0; i < dripCount; i++) {
+  drips.push({
+    x: (canvas.width / dripCount) * i,
+    baseHeight: 60 + Math.random() * 40,
+    amplitude: 40 + Math.random() * 60,
+    speed: 0.002 + Math.random() * 0.003,
+    offset: Math.random() * 1000
+  });
+}
+
+function drawSlime(time) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#a703c0";
+
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(canvas.width, 0);
+
+  for (let i = drips.length - 1; i >= 0; i--) {
+    let drip = drips[i];
+    let wave = Math.sin(time * drip.speed + drip.offset);
+    let height = drip.baseHeight + wave * drip.amplitude;
+    ctx.lineTo(drip.x, height);
+  }
+
+  ctx.lineTo(0, drips[0].baseHeight);
+  ctx.closePath();
+  ctx.fill();
+}
+
+function animate(time) {
+  drawSlime(time);
+  requestAnimationFrame(animate);
+}
+
+animate(0);
+
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
+
+</body>
+</html>

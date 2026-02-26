@@ -1,145 +1,179 @@
 <!DOCTYPE html>
-<html lang="en"> 
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>website</title>
 
 <style>
-/* ===== Base Page ===== */
+/* =====================================================
+   BASE PAGE
+===================================================== */
 body {
   margin: 0;
   min-height: 100vh;
-  background: #1a1a1a;
-  font-family: sans-serif;
+  padding: 120px 20px 40px;
+  box-sizing: border-box;
+
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  background: #1a1a1a;
+  font-family: sans-serif;
+  color: #f7f7f7;
+
   position: relative;
-  color: rgb(247, 247, 247);
-  padding: 120px 20px 40px;
-  box-sizing: border-box;
   overflow-x: hidden;
 }
 
-/* ===== Canvas Slime Effect ===== */
+/* =====================================================
+   SLIME CANVAS BACKGROUND
+===================================================== */
 canvas {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   filter: blur(10px) contrast(30);
   z-index: 0;
 }
 
-/* ===== Heading ===== */
+/* =====================================================
+   TITLE
+===================================================== */
 h1 {
-  font-size: clamp(32px, 6vw, 64px);
+  z-index: 2;
   margin-bottom: 30px;
   text-align: center;
-  letter-spacing: 1px;
-  color: #d600ff; /* bright purple */
-  font-weight: bold;
+
+  font-size: clamp(32px, 6vw, 64px);
+  font-weight: 900;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  position: relative;
-  z-index: 2;
-  /* 3D shadow layers */
+
+  color: #d600ff;
+
   text-shadow:
     1px 1px 0 #800080,
     2px 2px 0 #6a00aa,
     3px 3px 0 #50007f,
     4px 4px 0 #3c0055,
     5px 5px 0 #280033,
-    6px 6px 5px rgba(0,0,0,0.7); /* final soft shadow for depth */
+    6px 6px 8px rgba(0,0,0,0.7);
 }
 
-/* ===== Search Box ===== */
+/* =====================================================
+   SEARCH BOX
+===================================================== */
 .search-box {
   position: relative;
-  width: 100%;
-  max-width: 400px;
-  perspective: 1000px;
-  margin-bottom: 50px;
   z-index: 2;
+
+  width: 100%;
+  max-width: 420px;
+  margin-bottom: 50px;
+
+  perspective: 1000px;
 }
 
 .search-box input {
   width: 100%;
   padding: 14px 18px;
+
   border: none;
   border-radius: 14px;
   outline: none;
+
   font-size: 16px;
+  color: #ffffff;
   background: #1a1a1a;
-  color: white;
-  box-shadow: 
-    0 8px 15px rgba(0,0,0,0.4),
-    inset 0 2px 4px rgba(255,255,255,0.1);
-  transition: all 0.3s ease;
+
   box-sizing: border-box;
+
+  box-shadow:
+    0 8px 15px rgba(0,0,0,0.4),
+    inset 0 2px 4px rgba(255,255,255,0.08);
+
+  transition: all 0.3s ease;
+}
+
+.search-box input::placeholder {
+  color: #aaaaaa;
 }
 
 .search-box input:focus {
   transform: translateY(-3px);
-  box-shadow: 
+  box-shadow:
     0 12px 20px rgba(0,0,0,0.5),
     inset 0 2px 4px rgba(255,255,255,0.15),
-    0 0 12px #d600ff; /* purple glow */
+    0 0 14px #d600ff;
 }
 
-/* ===== Dropdown Results ===== */
+/* =====================================================
+   DROPDOWN RESULTS
+===================================================== */
 .results {
   position: absolute;
+  top: 100%;
+  left: 0;
+
   width: 100%;
   margin-top: 10px;
   border-radius: 14px;
+
   background: linear-gradient(145deg, #ff4dff, #c000c0 40%, #8f00ff);
-  box-shadow: 
+
+  box-shadow:
     0 15px 25px rgba(0,0,0,0.5),
     inset 0 1px 2px rgba(255,255,255,0.2);
+
   display: none;
   overflow: hidden;
+
   animation: fadeIn 0.2s ease-in-out;
-  z-index: 2;
 }
 
 .results div {
   padding: 14px;
-  color: white;
   cursor: pointer;
+  color: white;
   transition: all 0.25s ease;
 }
 
 .results div:hover {
-  transform: translateX(5px);
-  box-shadow: inset 3px 0 5px rgba(0,0,0,0.3);
+  transform: translateX(6px);
   background: linear-gradient(145deg, #ff7fff, #d000d0 40%, #a600ff);
+  box-shadow: inset 3px 0 6px rgba(0,0,0,0.3);
 }
 
-/* Smooth fade */
+/* =====================================================
+   ANIMATIONS
+===================================================== */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-5px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ===== Mobile Adjustments ===== */
+/* =====================================================
+   MOBILE
+===================================================== */
 @media (max-width: 480px) {
   body {
     padding: 100px 15px 30px;
   }
 
+  h1 {
+    font-size: clamp(28px, 8vw, 48px);
+  }
+
   .search-box input {
     font-size: 15px;
-    padding: 15px 4px;
+    padding: 14px 16px;
   }
 
   .results div {
     padding: 12px;
-  }
-
-  h1 {
-    font-size: clamp(28px, 8vw, 48px);
   }
 }
 </style>
@@ -157,7 +191,9 @@ h1 {
 </div>
 
 <script>
-// ===== Slime Canvas Animation =====
+/* =====================================================
+   SLIME CANVAS ANIMATION
+===================================================== */
 const canvas = document.getElementById("slime");
 const ctx = canvas.getContext("2d");
 
@@ -166,9 +202,10 @@ function resizeCanvas() {
   canvas.height = window.innerHeight;
 }
 resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
 
 const dripCount = 25;
-let drips = [];
+const drips = [];
 
 for (let i = 0; i < dripCount; i++) {
   drips.push({
@@ -183,14 +220,15 @@ for (let i = 0; i < dripCount; i++) {
 function drawSlime(time) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "#a703c0";
+
   ctx.beginPath();
   ctx.moveTo(0, 0);
   ctx.lineTo(canvas.width, 0);
 
   for (let i = drips.length - 1; i >= 0; i--) {
-    let drip = drips[i];
-    let wave = Math.sin(time * drip.speed + drip.offset);
-    let height = drip.baseHeight + wave * drip.amplitude;
+    const drip = drips[i];
+    const wave = Math.sin(time * drip.speed + drip.offset);
+    const height = drip.baseHeight + wave * drip.amplitude;
     ctx.lineTo(drip.x, height);
   }
 
@@ -205,15 +243,15 @@ function animate(time) {
 }
 animate(0);
 
-window.addEventListener("resize", resizeCanvas);
-
-// ===== Page Navigation =====
+/* =====================================================
+   SEARCH NAVIGATION
+===================================================== */
 const pages = [
-  { name: "In Development", url: "dev.html" },
+  { name: "Ivo", url: "ivo.html" },
   { name: "Shoutout wall", url: "shoutout.html" },
-  { name: "Contact", url: "contact.html" },
-  { name: "Blog", url: "blog.html" },
-  { name: "Cupcake Lovers", url: "shoutout.html" }
+  { name: "Tools", url: "tools.html" },
+  { name: "About", url: "about.html" },
+  { name: "Cupcake Lovers", url: "dev.html" }
 ];
 
 function showResults() {
@@ -233,14 +271,13 @@ function showResults() {
   filtered.forEach(page => {
     const div = document.createElement("div");
     div.textContent = page.name;
-    div.onclick = () => {
-      window.location.href = page.url;
-    };
+    div.onclick = () => window.location.href = page.url;
     resultsDiv.appendChild(div);
   });
 
   resultsDiv.style.display = filtered.length ? "block" : "none";
 }
 </script>
+
 </body>
 </html>

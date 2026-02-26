@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About</title>
+
+<style>
+/* ===== Base Page ===== */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #1a1a1a;
+  font-family: sans-serif;
+  color: white;
+  overflow-x: hidden;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* ===== Slime Canvas ===== */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  filter: blur(10px) contrast(30);
+  z-index: 0;
+}
+
+/* ===== Center Container ===== */
+.container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1000px;
+}
+
+/* ===== About Card ===== */
+.about-card {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  padding: clamp(20px, 4vw, 50px);
+  border-radius: 20px;
+
+  background: linear-gradient(145deg, #1f1f1f, #2c2c2c);
+
+  box-shadow:
+    15px 15px 35px rgba(0,0,0,0.7),
+    -5px -5px 15px rgba(255,255,255,0.05),
+    inset 0 2px 4px rgba(255,255,255,0.05);
+}
+
+/* ===== Image ===== */
+.about-image {
+  width: clamp(150px, 25vw, 250px);
+  height: clamp(150px, 25vw, 250px);
+  background-image: url("images/2001.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+/* ===== Text ===== */
+.about-text h1 {
+  margin: 0 0 15px 0;
+  font-size: clamp(22px, 4vw, 36px);
+  color: #d600ff;
+}
+
+.about-text p {
+  margin: 0 0 20px 0;
+  opacity: 0.85;
+  line-height: 1.7;
+  font-size: clamp(14px, 2vw, 18px);
+}
+
+/* ===== Tablet ===== */
+@media (max-width: 900px) {
+  .about-card {
+    gap: 25px;
+  }
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 768px) {
+  body {
+    align-items: flex-start;
+  }
+
+  .about-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 25px;
+  }
+
+  .about-image {
+    margin-bottom: 10px;
+  }
+}
+
+/* ===== Small Phones ===== */
+@media (max-width: 480px) {
+  body {
+    padding: 15px;
+  }
+
+  .about-card {
+    border-radius: 15px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="slime"></canvas>
+
+<div class="container">
+  <div class="about-card">
+    <div class="about-image"></div>
+
+    <div class="about-text">
+      <h1>ABOUT</h1>
+      <p>
+       Welcome to the 200 project. This project is a beginner one started by Ivo (Ivan).
+       It will cover everything from .exe's to even websites like this.
+       The future idea of it is to turn 200 into a store for others.
+      </p>
+      
+      <p>
+       Everything currently in 200 will be free and open source to its users.
+      </p>
+      
+      <h1>OWNER INFO</h1>
+      <p> 
+        Ivo is an intermediate coder who wanted to start a website and a project series.
+        200 is just that. Everything made with members and/or other coders will be credited to them.
+      </p>
+
+      <h1>DISCLAIMER</h1>
+      <p> 
+        All assets under 200 projects are not subject to responsibility if a user 
+        or active community member uses assets openly available to them.
+        Failure to comply with a country's or state's laws is done at the will of the user.
+        200 project does not condone or accept any known criminal entities.
+        All assets are openly available and open source, but a user of an asset is expected 
+        to maintain the asset's main properties.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById("slime");
+const ctx = canvas.getContext("2d");
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+
+const dripCount = 25;
+let drips = [];
+
+function createDrips() {
+  drips = [];
+  for (let i = 0; i < dripCount; i++) {
+    drips.push({
+      x: (canvas.width / dripCount) * i,
+      baseHeight: 60 + Math.random() * 40,
+      amplitude: 40 + Math.random() * 60,
+      speed: 0.002 + Math.random() * 0.003,
+      offset: Math.random() * 1000
+    });
+  }
+}
+createDrips();
+
+function drawSlime(time) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#a703c0";
+
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(canvas.width, 0);
+
+  for (let i = drips.length - 1; i >= 0; i--) {
+    let drip = drips[i];
+    let wave = Math.sin(time * drip.speed + drip.offset);
+    let height = drip.baseHeight + wave * drip.amplitude;
+    ctx.lineTo(drip.x, height);
+  }
+
+  ctx.lineTo(0, drips[0].baseHeight);
+  ctx.closePath();
+  ctx.fill();
+}
+
+function animate(time) {
+  drawSlime(time);
+  requestAnimationFrame(animate);
+}
+animate(0);
+
+window.addEventListener("resize", () => {
+  resizeCanvas();
+  createDrips();
+});
+</script>
+
+</body>
+</html>
